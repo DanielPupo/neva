@@ -1,0 +1,32 @@
+{
+  "name": "neva",
+  "version": "1.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "web": "expo start --web",
+    "format": "prettier --write App.tsx index.ts src tests",
+    "format:check": "prettier --check App.tsx index.ts src tests"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "expo": "~57.0.0",
+    "expo-sensors": "~57.0.3",
+    "react": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-svg": "15.15.4"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.0",
+    "prettier": "^3.9.6",
+    "react-dom": "^19.2.3",
+    "react-native-web": "^0.21.2",
+    "tsx": "^4.20.0",
+    "typescript": "~5.9.2"
+  }
+}

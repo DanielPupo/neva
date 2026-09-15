@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "NEVA",
+    "slug": "neva",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSMotionUsageDescription": "O NEVA usa os movimentos do celular para controlar o snowboard."
+      }
+    },
+    "android": {
+      "package": "com.neva.snow"
+    },
+    "plugins": [
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Permita ao NEVA usar os movimentos do celular para controlar o snowboard."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "6a606778-d208-41d3-8eea-a37504fc4b0b"
+      }
+    },
+    "owner": "pupoo"
+  }
+}

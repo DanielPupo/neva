@@ -31,16 +31,18 @@ export function HomeScreen({ controller: c }: { controller: GameController }) {
   return (
     <View style={styles.home}>
       <View style={styles.hero}>
-        <View style={styles.kickerRow}>
-          <View style={styles.liveDot} />
-          <Text style={ui.eyebrow}>DESCIDA LIVRE / 01</Text>
+        <View style={styles.heroCard}>
+          <View style={styles.kickerRow}>
+            <View style={styles.liveDot} />
+            <Text style={ui.eyebrow}>DESCIDA LIVRE / 01</Text>
+          </View>
+          <Text style={styles.logo}>
+            NEVA<Text style={{ color: colors.accent }}>.</Text>
+          </Text>
+          <Text style={styles.subtitle}>{'Sinta a montanha.\nFaça a sua linha.'}</Text>
+          <View style={styles.swoosh} />
+          <Text style={styles.challenge}>Você consegue chegar mais longe?</Text>
         </View>
-        <Text style={styles.logo}>
-          NEVA<Text style={{ color: colors.accent }}>.</Text>
-        </Text>
-        <Text style={styles.subtitle}>{'Sinta a montanha.\nFaça a sua linha.'}</Text>
-        <View style={styles.swoosh} />
-        <Text style={styles.challenge}>Você consegue chegar mais longe?</Text>
       </View>
       <View style={styles.bottom}>
         <View style={styles.tagRow}>
@@ -94,12 +96,27 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
   },
   hero: { paddingTop: 4 },
+  heroCard: {
+    alignSelf: 'flex-start',
+    maxWidth: 310,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    borderRadius: 22,
+    backgroundColor: '#f5fafbf0',
+    borderWidth: 1,
+    borderColor: '#ffffffcc',
+    shadowColor: '#1b3648',
+    shadowOpacity: 0.12,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 5 },
+    elevation: 4,
+  },
   kickerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#ef8a4c' },
-  logo: { fontSize: 84, fontWeight: '900', letterSpacing: -5, color: colors.ink, marginTop: 8 },
-  subtitle: { fontSize: 18, lineHeight: 25, color: colors.ink, fontWeight: '600' },
+  logo: { fontSize: 72, fontWeight: '900', letterSpacing: -4, color: colors.ink, marginTop: 8 },
+  subtitle: { fontSize: 18, lineHeight: 25, color: '#173448', fontWeight: '700' },
   swoosh: { width: 72, height: 5, borderRadius: 5, backgroundColor: colors.accent, marginTop: 18 },
-  challenge: { fontSize: 12, color: colors.muted, marginTop: 12, fontWeight: '700' },
+  challenge: { fontSize: 12, color: '#34576b', marginTop: 12, fontWeight: '800' },
   bottom: {
     backgroundColor: '#f8fbfdf2',
     borderRadius: 24,
@@ -113,7 +130,7 @@ const styles = StyleSheet.create({
   tagRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   tag: {
     fontSize: 9,
-    color: colors.muted,
+    color: '#34576b',
     textAlign: 'center',
     letterSpacing: 1.7,
     fontWeight: '700',
@@ -132,7 +149,7 @@ const styles = StyleSheet.create({
   moveHint: { flex: 1, alignItems: 'center' },
   moveSymbol: { color: colors.accent, fontSize: 22, fontWeight: '700', lineHeight: 25 },
   moveTitle: { color: colors.ink, fontSize: 9, fontWeight: '900', letterSpacing: 1 },
-  moveDetail: { color: colors.muted, fontSize: 9, marginTop: 2 },
+  moveDetail: { color: '#456578', fontSize: 9, marginTop: 2 },
   records: {
     flexDirection: 'row',
     alignItems: 'center',

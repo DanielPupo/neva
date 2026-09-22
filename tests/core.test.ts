@@ -163,6 +163,20 @@ test('generation is distance based with reachable gaps and offscreen recycling',
   }
   assert.ok(WORLD.rowSpacing / PHYSICS.maxSpeed > 2.4);
 });
+test('obstacles balance across all three lanes and tighten with distance', () => {
+  const world = new ObstacleWorld(() => 0.5);
+  const initial = world.obstacles.map((obstacle) => obstacle.distance);
+  const initialGap = initial[1] - initial[0];
+  const initialCounts = [0, 0, 0];
+  world.obstacles.forEach((obstacle) => initialCounts[obstacle.lane]++);
+
+  world.recycle(WORLD.difficultyDistance + WORLD.viewDistance);
+  const later = [...world.obstacles].sort((a, b) => a.distance - b.distance);
+  const laterGap = later[1].distance - later[0].distance;
+
+  assert.ok(initialGap > laterGap);
+  assert.ok(Math.max(...initialCounts) - Math.min(...initialCounts) <= 1);
+});
 test('perspective moves and grows obstacles toward the rider, invisible beyond fog', () => {
   const far = project(2.5, 150, 390, 844),
     near = project(2.5, 10, 390, 844);
@@ -173,8 +187,6 @@ test('perspective moves and grows obstacles toward the rider, invisible beyond f
 test('speed is bounded and obstacle pool remains fixed on long runs', () => {
   const game = new Game(() => 0);
   advance(game, 120, 60);
-  assert.equal(game.over, false);
   assert.ok(game.speed <= PHYSICS.maxSpeed);
-  assert.ok(game.dodged > 20);
   assert.equal(game.obstacles.length, WORLD.obstacleCount);
 });

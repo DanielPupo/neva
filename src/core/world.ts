@@ -4,6 +4,7 @@ import { OBSTACLE_KINDS, type Lane, type Obstacle } from '../types/game';
 export class ObstacleWorld {
   readonly obstacles: Obstacle[] = [];
   private nextDistance: number = WORLD.firstRow;
+  private readonly laneCounts: Record<Lane, number> = { 0: 0, 1: 0, 2: 0 };
 
   constructor(private readonly random: () => number = Math.random) {
     // Stable kinds let the renderer reuse one artwork per slot throughout a run.
@@ -18,8 +19,19 @@ export class ObstacleWorld {
 
   private nextRow() {
     const distance = this.nextDistance;
-    this.nextDistance += WORLD.rowSpacing + this.random() * WORLD.rowVariation;
-    return { distance, lane: Math.min(2, Math.floor(this.random() * 3)) as Lane, passed: false };
+    const progress = Math.min(1, Math.max(0, distance / WORLD.difficultyDistance));
+    const spacingRange = WORLD.rowSpacing + WORLD.rowVariation * (1 - progress);
+    const spacing = Math.max(
+      WORLD.minimumRowSpacing,
+      WORLD.rowSpacing + this.random() * (spacingRange - WORLD.rowSpacing),
+    );
+    this.nextDistance += spacing;
+
+    const leastUsed = Math.min(...Object.values(this.laneCounts));
+    const available = ([0, 1, 2] as Lane[]).filter((lane) => this.laneCounts[lane] === leastUsed);
+    const lane = available[Math.floor(this.random() * available.length)];
+    this.laneCounts[lane]++;
+    return { distance, lane, passed: false };
   }
 
   recycle(playerDistance: number) {

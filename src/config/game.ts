@@ -21,6 +21,8 @@ export const WORLD = {
   firstRow: 55,
   rowSpacing: 58,
   rowVariation: 12,
+  difficultyDistance: 900,
+  minimumRowSpacing: 58,
   viewDistance: 220,
   fogStart: 160,
   recycleBehind: 14,

@@ -65,6 +65,10 @@ test('calibration rejects motion, insufficient data, NaN and horizontal posture'
   assert.equal(d.calibrate(Array.from({ length: 40 }, () => ({ x: 0, y: 0.1, z: 1 }))), false);
   assert.equal(d.calibrate(Array.from({ length: 40 }, () => ({ ...neutral, z: NaN }))), false);
 });
+test('calibration accepts a complete stable upright sample window', () => {
+  const d = new GestureDetector();
+  assert.equal(d.calibrate(Array.from({ length: 25 }, () => neutral)), true);
+});
 test('upward impulse and its cooldown work with both sensor polarities', () => {
   for (const sign of [-1, 1]) {
     const { detector, sample } = calibrated(sign);

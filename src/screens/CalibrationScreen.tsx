@@ -18,8 +18,14 @@ export function CalibrationScreen({ controller: c }: { controller: GameControlle
       <Text style={styles.body}>Salte os troncos. Contorne árvores e pedras.</Text>
       <Note>{c.sensor.error || c.message}</Note>
       <Button
-        label={c.sensor.ready ? 'CALIBRAR E DESCER' : 'AGUARDANDO SENSOR…'}
-        disabled={!c.sensor.ready}
+        label={
+          !c.sensor.ready
+            ? 'AGUARDANDO SENSOR…'
+            : c.sensor.canCalibrate
+              ? 'CALIBRAR E DESCER'
+              : 'COLETANDO LEITURAS…'
+        }
+        disabled={!c.sensor.ready || !c.sensor.canCalibrate}
         onPress={c.calibrate}
       />
       <Button secondary label="VOLTAR" onPress={c.backFromCalibration} />

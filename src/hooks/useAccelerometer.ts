@@ -20,6 +20,7 @@ export function useAccelerometer(
   const readyRef = useRef(false);
   const callbacks = useRef({ onGesture, onError });
   callbacks.current = { onGesture, onError };
+  const [sampleCount, setSampleCount] = useState(0);
   const [state, setState] = useState<{ status: Status; error: string }>({
     status: 'idle',
     error: '',
@@ -28,6 +29,7 @@ export function useAccelerometer(
   useEffect(() => {
     readyRef.current = false;
     if (!enabled) {
+      setSampleCount(0);
       setState({ status: 'idle', error: '' });
       return;
     }
@@ -37,6 +39,7 @@ export function useAccelerometer(
     let live = false;
     samples.current = [];
     cursor.current = 0;
+    setSampleCount(0);
     detector.current.reset();
     setState({ status: 'starting', error: '' });
     const fail = (message: string) => {
@@ -68,6 +71,9 @@ export function useAccelerometer(
           raw.current = value;
           samples.current[cursor.current] = { value, time: now };
           cursor.current = (cursor.current + 1) % 64;
+          const nextSampleCount = Math.min(samples.current.length, 64);
+          if (nextSampleCount === SENSOR.minSamples || nextSampleCount % 5 === 0)
+            setSampleCount(nextSampleCount);
           lastSample.current = now;
           readyRef.current = true;
           if (!live) {
@@ -110,5 +116,14 @@ export function useAccelerometer(
     () => readyRef.current && Date.now() - lastSample.current < SENSOR.staleAfter,
     [],
   );
-  return { ...state, raw, detector, calibrate, isLive, ready: enabled && state.status === 'ready' };
+  return {
+    ...state,
+    raw,
+    detector,
+    calibrate,
+    isLive,
+    sampleCount,
+    canCalibrate: sampleCount >= SENSOR.minSamples,
+    ready: enabled && state.status === 'ready',
+  };
 }

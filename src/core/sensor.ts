@@ -73,10 +73,11 @@ export class GestureDetector {
     const dt = Math.max(1, Math.min(100, now - this.lastTime));
     this.lastTime = now;
     const alpha = 1 - Math.exp(-dt / SENSOR.filterTime);
+    const clampLateral = (value: number) => Math.max(-0.45, Math.min(0.45, value));
     const residual = {
-      x: sample.x - this.smooth.x,
+      x: clampLateral(sample.x - this.smooth.x),
       y: sample.y - this.smooth.y,
-      z: sample.z - this.smooth.z,
+      z: clampLateral(sample.z - this.smooth.z),
     };
     this.smooth.x += alpha * residual.x;
     this.smooth.y += alpha * residual.y;

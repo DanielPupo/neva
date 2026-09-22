@@ -42,6 +42,7 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
   );
   const initialGame = useMemo(() => new Game(() => 0.48), []);
   const lastGame = useRef(initialGame);
+  const fallTriggered = useRef(false);
   const draw = (game: Game) => {
     lastGame.current = game;
     const cameraShift = -game.x * width * 0.01;
@@ -102,9 +103,12 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
     motion.lean.setValue(clamp(game.lateralVelocity * 3, -21, 21));
     motion.bodyScale.setValue(1 - game.landing * 0.09);
     if (game.over) {
-      // Called once by the controller at collision, never restarted by a render.
-      Animated.timing(motion.fall, { toValue: 72, duration: 420, useNativeDriver: true }).start();
+      if (!fallTriggered.current) {
+        fallTriggered.current = true;
+        Animated.timing(motion.fall, { toValue: 72, duration: 420, useNativeDriver: true }).start();
+      }
     } else {
+      fallTriggered.current = false;
       motion.fall.stopAnimation();
       motion.fall.setValue(0);
     }

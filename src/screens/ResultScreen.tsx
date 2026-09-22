@@ -9,7 +9,7 @@ export function ResultScreen({ controller: c }: { controller: GameController }) 
     <Panel label="FIM DA DESCIDA" title={'Uma nova linha\nespera por você.'}>
       <Text style={{ fontSize: 54, fontWeight: '800', color: colors.accent }}>
         {c.hud.score}
-        <Text style={{ fontSize: 17 }}> pts</Text>
+        <Text style={{ fontSize: 17, color: colors.muted }}> pts</Text>
       </Text>
       <Stat label="Distância" value={`${c.hud.distance} m`} />
       <Stat label="Obstáculos superados" value={c.hud.dodged} />

@@ -19,6 +19,10 @@ export function Hud({ controller: c }: { controller: GameController }) {
           {c.hud.speed} <Text style={styles.unit}>km/h</Text>
         </Text>
       </View>
+      <View style={styles.scoreBox}>
+        <Text style={styles.label}>PONTOS</Text>
+        <Text style={styles.score}>{c.hud.score}</Text>
+      </View>
       {c.screen === 'playing' && (
         <Pressable
           accessibilityRole="button"
@@ -26,7 +30,7 @@ export function Hud({ controller: c }: { controller: GameController }) {
           onPress={c.pause}
           style={styles.pause}
         >
-          <Text style={{ color: colors.ink, fontSize: 22 }}>Ⅱ</Text>
+          <Text style={{ color: colors.ink, fontSize: 22, fontWeight: '700' }}>Ⅱ</Text>
         </Pressable>
       )}
     </View>
@@ -57,21 +61,57 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
   },
-  badge: { backgroundColor: '#f5f9f3df', padding: 13, borderRadius: 18, minWidth: 106 },
+  badge: {
+    backgroundColor: colors.glass,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 18,
+    minWidth: 108,
+    shadowColor: '#234563',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
+  },
   label: { fontSize: 8, fontWeight: '800', letterSpacing: 1.4, color: colors.muted },
   number: { fontSize: 29, fontWeight: '800', color: colors.ink },
   velocity: { fontSize: 19, fontWeight: '700', color: colors.ink, marginTop: 4 },
   unit: { fontSize: 11, fontWeight: '500' },
-  speed: { flex: 1 },
+  speed: {
+    flex: 1,
+    backgroundColor: colors.glass,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderRadius: 18,
+    shadowColor: '#234563',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
+  },
+  scoreBox: {
+    backgroundColor: colors.accentSoft,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 18,
+    minWidth: 72,
+    alignItems: 'center',
+  },
+  score: { fontSize: 22, fontWeight: '800', color: colors.ink },
   pause: {
     width: 45,
     height: 45,
     borderRadius: 23,
-    backgroundColor: '#f5f9f3df',
+    backgroundColor: colors.glass,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#234563',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
   },
   debug: {
     position: 'absolute',

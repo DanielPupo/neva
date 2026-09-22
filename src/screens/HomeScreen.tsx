@@ -39,7 +39,16 @@ const styles = StyleSheet.create({
   },
   logo: { fontSize: 84, fontWeight: '900', letterSpacing: -5, color: colors.ink },
   subtitle: { fontSize: 16, lineHeight: 24, color: colors.ink },
-  bottom: { backgroundColor: '#f8fbfdde', borderRadius: 24, padding: 19 },
+  bottom: {
+    backgroundColor: '#f8fbfdde',
+    borderRadius: 24,
+    padding: 19,
+    shadowColor: '#16354b',
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+  },
   tag: {
     fontSize: 9,
     color: colors.muted,

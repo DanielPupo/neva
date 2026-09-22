@@ -6,8 +6,8 @@ export function Environment() {
     <Svg width="100%" height="100%" viewBox="0 0 400 850" preserveAspectRatio="none">
       <Defs>
         <LinearGradient id="sky" x2="0" y2="1">
-          <Stop stopColor="#758d9d" />
-          <Stop offset="1" stopColor="#dae5e8" />
+          <Stop stopColor="#527f98" />
+          <Stop offset="1" stopColor="#dcecef" />
         </LinearGradient>
         <LinearGradient id="snow" x2=".6" y2="1">
           <Stop stopColor="#d2dfe5" />
@@ -20,8 +20,8 @@ export function Environment() {
         </LinearGradient>
       </Defs>
       <Rect width="400" height="850" fill="url(#sky)" />
-      <Circle cx="306" cy="94" r="48" fill="#f9ebcf" opacity=".09" />
-      <Circle cx="306" cy="94" r="27" fill="#fff4d8" opacity=".85" />
+      <Circle cx="306" cy="94" r="48" fill="#ffd99a" opacity=".14" />
+      <Circle cx="306" cy="94" r="27" fill="#ffe6ae" opacity=".9" />
       <Path d="M-80 254L42 83 93 131 147 53 257 238 305 136 440 266Z" fill="#9aabb8" />
       <Path
         d="M42 83L3 151 35 138 57 157 70 134ZM147 53L90 143 117 130 144 161 166 131 194 143Z"

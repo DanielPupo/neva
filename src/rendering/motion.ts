@@ -1,6 +1,15 @@
 import { Animated } from 'react-native';
 import { project } from './projection';
 
+const animatedCache = new WeakMap<Animated.Value, number>();
+
+export function setAnimatedValue(value: Animated.Value, next: number, tolerance = 0.001) {
+  const previous = animatedCache.get(value);
+  if (previous !== undefined && Math.abs(previous - next) <= tolerance) return;
+  value.setValue(next);
+  animatedCache.set(value, next);
+}
+
 export function createMotion() {
   return {
     x: new Animated.Value(0),
@@ -22,13 +31,13 @@ export function positionSprite(
 ) {
   const visibleOpacity = point.opacity * opacity;
   if (visibleOpacity <= 0) {
-    motion.opacity.setValue(0);
+    setAnimatedValue(motion.opacity, 0);
     return;
   }
-  motion.x.setValue(point.x - width / 2);
+  setAnimatedValue(motion.x, point.x - width / 2);
   // Anchor scale to the contact point, so objects never float above the slope.
-  motion.y.setValue(point.y - height / 2 - (base - height / 2) * point.scale);
-  motion.scale.setValue(point.scale);
-  motion.opacity.setValue(visibleOpacity);
-  motion.depth.setValue(point.depth);
+  setAnimatedValue(motion.y, point.y - height / 2 - (base - height / 2) * point.scale);
+  setAnimatedValue(motion.scale, point.scale);
+  setAnimatedValue(motion.opacity, visibleOpacity);
+  setAnimatedValue(motion.depth, point.depth);
 }

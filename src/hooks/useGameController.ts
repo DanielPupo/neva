@@ -18,6 +18,8 @@ export function useGameController() {
   const [hud, setHud] = useState(game.current.hud());
   const [debug, setDebug] = useState(false);
   const hudElapsed = useRef(0);
+  const renderElapsed = useRef(0);
+  const lastHud = useRef(hud);
   const resumeAfterCalibration = useRef(false);
   const recordStore = useRecords();
   const navigate = useCallback((next: Screen) => {
@@ -72,10 +74,24 @@ export function useGameController() {
     if (currentScreen.current !== 'playing' || !sensor.isLive()) return;
     const engine = game.current;
     engine.tick(dt);
-    scene.current?.draw(engine);
+    renderElapsed.current += dt;
+    if (renderElapsed.current >= 1 / 60 || engine.over) {
+      scene.current?.draw(engine);
+      renderElapsed.current = 0;
+    }
     hudElapsed.current += dt;
-    if (hudElapsed.current >= 0.16 || engine.over) {
-      setHud(engine.hud());
+    if (hudElapsed.current >= 0.2 || engine.over) {
+      const nextHud = engine.hud();
+      if (
+        engine.over ||
+        nextHud.distance !== lastHud.current.distance ||
+        nextHud.score !== lastHud.current.score ||
+        nextHud.speed !== lastHud.current.speed ||
+        nextHud.dodged !== lastHud.current.dodged
+      ) {
+        lastHud.current = nextHud;
+        setHud(nextHud);
+      }
       hudElapsed.current = 0;
     }
     if (engine.over) {

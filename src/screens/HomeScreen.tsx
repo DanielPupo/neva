@@ -30,6 +30,12 @@ export function HomeScreen({ controller: c }: { controller: GameController }) {
 
   return (
     <View style={styles.home}>
+      <View pointerEvents="none" style={styles.backgroundDecor}>
+        <View style={styles.glowOne} />
+        <View style={styles.glowTwo} />
+        <View style={styles.glowThree} />
+      </View>
+
       <View style={styles.hero}>
         <View style={styles.heroCard}>
           <View style={styles.kickerRow}>
@@ -95,6 +101,40 @@ const styles = StyleSheet.create({
     paddingTop: 58,
     paddingBottom: 32,
   },
+  backgroundDecor: {
+    ...StyleSheet.absoluteFill,
+    overflow: 'hidden',
+  },
+  glowOne: {
+    position: 'absolute',
+    width: 260,
+    height: 260,
+    borderRadius: 130,
+    backgroundColor: '#fff3d9',
+    opacity: 0.8,
+    top: 40,
+    right: -60,
+  },
+  glowTwo: {
+    position: 'absolute',
+    width: 240,
+    height: 240,
+    borderRadius: 120,
+    backgroundColor: '#d9f4ff',
+    opacity: 0.7,
+    bottom: 140,
+    left: -70,
+  },
+  glowThree: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: '#ffd5b7',
+    opacity: 0.75,
+    bottom: 50,
+    right: 90,
+  },
   hero: { paddingTop: 4 },
   heroCard: {
     alignSelf: 'flex-start',
@@ -102,7 +142,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 16,
     borderRadius: 22,
-    backgroundColor: '#f5fafbf0',
+    backgroundColor: 'rgba(255,255,255,0.82)',
     borderWidth: 1,
     borderColor: '#ffffffcc',
     shadowColor: '#1b3648',
@@ -112,13 +152,23 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   kickerRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#ef8a4c' },
+  liveDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: colors.accentStrong },
   logo: { fontSize: 72, fontWeight: '900', letterSpacing: -4, color: colors.ink, marginTop: 8 },
   subtitle: { fontSize: 18, lineHeight: 25, color: '#173448', fontWeight: '700' },
-  swoosh: { width: 72, height: 5, borderRadius: 5, backgroundColor: colors.accent, marginTop: 18 },
+  swoosh: {
+    width: 84,
+    height: 7,
+    borderRadius: 999,
+    backgroundColor: colors.accent,
+    marginTop: 18,
+    shadowColor: colors.accent,
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 0 },
+  },
   challenge: { fontSize: 12, color: '#34576b', marginTop: 12, fontWeight: '800' },
   bottom: {
-    backgroundColor: '#f8fbfdf2',
+    backgroundColor: 'rgba(248,251,253,0.86)',
     borderRadius: 24,
     padding: 18,
     shadowColor: '#16354b',
@@ -126,6 +176,8 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
     elevation: 3,
+    borderWidth: 1,
+    borderColor: '#ffffffcc',
   },
   tagRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   tag: {
@@ -137,7 +189,7 @@ const styles = StyleSheet.create({
   },
   mode: {
     fontSize: 9,
-    color: colors.accent,
+    color: colors.accentStrong,
     letterSpacing: 1.2,
     fontWeight: '800',
     backgroundColor: colors.accentSoft,
@@ -147,7 +199,7 @@ const styles = StyleSheet.create({
   },
   moves: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 18, marginBottom: 2 },
   moveHint: { flex: 1, alignItems: 'center' },
-  moveSymbol: { color: colors.accent, fontSize: 22, fontWeight: '700', lineHeight: 25 },
+  moveSymbol: { color: colors.accentStrong, fontSize: 22, fontWeight: '700', lineHeight: 25 },
   moveTitle: { color: colors.ink, fontSize: 9, fontWeight: '900', letterSpacing: 1 },
   moveDetail: { color: '#456578', fontSize: 9, marginTop: 2 },
   records: {

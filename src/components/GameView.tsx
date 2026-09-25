@@ -1,11 +1,11 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { forwardRef, memo, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { Animated, StyleSheet, View, useWindowDimensions } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { PHYSICS, WORLD } from '../config/game';
 import { Game } from '../core/game';
 import { OBSTACLE_KINDS } from '../types/game';
 import { clamp, modulo } from '../core/math';
-import { createMotion, positionSprite } from '../rendering/motion';
+import { createMotion, positionSprite, setAnimatedValue } from '../rendering/motion';
 import { project } from '../rendering/projection';
 import { Environment } from './art/Environment';
 import { ART_BASE, ART_HEIGHT, ART_WIDTH, ObstacleArt } from './art/ObstacleArt';
@@ -15,7 +15,7 @@ import { WorldSprite } from './WorldSprite';
 export type SceneHandle = { draw: (game: Game) => void };
 const values = (count: number) => Array.from({ length: count }, createMotion);
 
-export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
+const GameViewInner = forwardRef<SceneHandle>(function GameView(_, ref) {
   const { width, height } = useWindowDimensions();
   const motion = useMemo(
     () => ({
@@ -51,7 +51,7 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
       point.x += cameraShift;
       return point;
     };
-    motion.background.setValue(cameraShift * 0.25);
+    setAnimatedValue(motion.background, cameraShift * 0.25);
     game.obstacles.forEach((obstacle, i) => {
       const z = obstacle.distance - game.distance;
       positionSprite(
@@ -100,8 +100,8 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
       6,
       0.28 - game.height * 0.065,
     );
-    motion.lean.setValue(clamp(game.lateralVelocity * 3, -21, 21));
-    motion.bodyScale.setValue(1 - game.landing * 0.09);
+    setAnimatedValue(motion.lean, clamp(game.lateralVelocity * 3, -21, 21));
+    setAnimatedValue(motion.bodyScale, 1 - game.landing * 0.09);
     if (game.over) {
       if (!fallTriggered.current) {
         fallTriggered.current = true;
@@ -110,7 +110,7 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
     } else {
       fallTriggered.current = false;
       motion.fall.stopAnimation();
-      motion.fall.setValue(0);
+      setAnimatedValue(motion.fall, 0);
     }
   };
   useImperativeHandle(ref, () => ({ draw }), [width, height, motion]);
@@ -166,6 +166,8 @@ export const GameView = forwardRef<SceneHandle>(function GameView(_, ref) {
     </View>
   );
 });
+
+export const GameView = memo(GameViewInner);
 const styles = StyleSheet.create({
   scene: { ...StyleSheet.absoluteFill, overflow: 'hidden', backgroundColor: '#cadce4' },
   shadow: { width: 52, height: 12, borderRadius: 30, backgroundColor: '#3c5b70' },

@@ -43,6 +43,29 @@ export class Game {
     return (this.lane - 1) * PHYSICS.laneWidth;
   }
 
+  reset() {
+    this.lane = 1;
+    this.x = 0;
+    this.lateralVelocity = 0;
+    this.height = 0;
+    this.verticalVelocity = 0;
+    this.landing = 0;
+    this.distance = 0;
+    this.speed = PHYSICS.initialSpeed;
+    this.time = 0;
+    this.dodged = 0;
+    this.over = false;
+    this.accumulator = 0;
+    this.trailCursor = 0;
+    this.lastTrail = 0;
+    this.trail.forEach((point) => {
+      point.x = 0;
+      point.distance = 0;
+      point.active = false;
+    });
+    this.world.reset();
+  }
+
   input(gesture: Gesture) {
     if (this.over) return;
     if (gesture === 'jump') {

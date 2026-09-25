@@ -16,7 +16,7 @@ export function createMotion() {
     y: new Animated.Value(0),
     scale: new Animated.Value(1),
     opacity: new Animated.Value(0),
-    depth: new Animated.Value(0),
+    depth: 0,
   };
 }
 export type Motion = ReturnType<typeof createMotion>;
@@ -39,5 +39,5 @@ export function positionSprite(
   setAnimatedValue(motion.y, point.y - height / 2 - (base - height / 2) * point.scale);
   setAnimatedValue(motion.scale, point.scale);
   setAnimatedValue(motion.opacity, visibleOpacity);
-  setAnimatedValue(motion.depth, point.depth);
+  motion.depth = point.depth;
 }

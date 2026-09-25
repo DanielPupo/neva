@@ -12,7 +12,11 @@ import { ART_BASE, ART_HEIGHT, ART_WIDTH, ObstacleArt } from './art/ObstacleArt'
 import { Rider } from './art/Rider';
 import { WorldSprite } from './WorldSprite';
 
-export type SceneHandle = { draw: (game: Game) => void };
+export type SceneHandle = {
+  draw: (game: Game) => void;
+  reset: () => void;
+  resetVisualState: () => void;
+};
 const values = (count: number) => Array.from({ length: count }, createMotion);
 
 const GameViewInner = forwardRef<SceneHandle>(function GameView(_, ref) {
@@ -43,6 +47,58 @@ const GameViewInner = forwardRef<SceneHandle>(function GameView(_, ref) {
   const initialGame = useMemo(() => new Game(() => 0.48), []);
   const lastGame = useRef(initialGame);
   const fallTriggered = useRef(false);
+  const resetVisualState = () => {
+    motion.background.stopAnimation();
+    motion.lean.stopAnimation();
+    motion.fall.stopAnimation();
+    motion.bodyScale.stopAnimation();
+    fallTriggered.current = false;
+    setAnimatedValue(motion.background, 0);
+    setAnimatedValue(motion.lean, 0);
+    setAnimatedValue(motion.fall, 0);
+    setAnimatedValue(motion.bodyScale, 1);
+    motion.obstacles.forEach((sprite) => {
+      setAnimatedValue(sprite.x, 0);
+      setAnimatedValue(sprite.y, 0);
+      setAnimatedValue(sprite.scale, 1);
+      setAnimatedValue(sprite.opacity, 0);
+      sprite.depth = 0;
+    });
+    motion.trees.forEach((sprite) => {
+      setAnimatedValue(sprite.x, 0);
+      setAnimatedValue(sprite.y, 0);
+      setAnimatedValue(sprite.scale, 1);
+      setAnimatedValue(sprite.opacity, 0);
+      sprite.depth = 0;
+    });
+    motion.snow.forEach((sprite) => {
+      setAnimatedValue(sprite.x, 0);
+      setAnimatedValue(sprite.y, 0);
+      setAnimatedValue(sprite.scale, 1);
+      setAnimatedValue(sprite.opacity, 0);
+      sprite.depth = 0;
+    });
+    motion.trail.forEach((sprite) => {
+      setAnimatedValue(sprite.x, 0);
+      setAnimatedValue(sprite.y, 0);
+      setAnimatedValue(sprite.scale, 1);
+      setAnimatedValue(sprite.opacity, 0);
+      sprite.depth = 0;
+    });
+    setAnimatedValue(motion.rider.x, 0);
+    setAnimatedValue(motion.rider.y, 0);
+    setAnimatedValue(motion.rider.scale, 1);
+    setAnimatedValue(motion.rider.opacity, 0);
+    motion.rider.depth = 0;
+    setAnimatedValue(motion.shadow.x, 0);
+    setAnimatedValue(motion.shadow.y, 0);
+    setAnimatedValue(motion.shadow.scale, 1);
+    setAnimatedValue(motion.shadow.opacity, 0);
+    motion.shadow.depth = 0;
+  };
+  const reset = () => {
+    resetVisualState();
+  };
   const draw = (game: Game) => {
     lastGame.current = game;
     const cameraShift = -game.x * width * 0.01;
@@ -105,6 +161,7 @@ const GameViewInner = forwardRef<SceneHandle>(function GameView(_, ref) {
     if (game.over) {
       if (!fallTriggered.current) {
         fallTriggered.current = true;
+        motion.fall.stopAnimation();
         Animated.timing(motion.fall, { toValue: 72, duration: 420, useNativeDriver: true }).start();
       }
     } else {
@@ -113,7 +170,7 @@ const GameViewInner = forwardRef<SceneHandle>(function GameView(_, ref) {
       setAnimatedValue(motion.fall, 0);
     }
   };
-  useImperativeHandle(ref, () => ({ draw }), [width, height, motion]);
+  useImperativeHandle(ref, () => ({ draw, reset, resetVisualState }), [width, height, motion]);
   useEffect(() => {
     draw(lastGame.current);
   }, [width, height]);

@@ -26,6 +26,20 @@ export function useGameController() {
     currentScreen.current = next;
     setScreen(next);
   }, []);
+  const resetScene = useCallback(() => {
+    scene.current?.reset?.();
+  }, []);
+  const beginFreshRun = useCallback(() => {
+    const freshGame = new Game();
+    game.current = freshGame;
+    setHud(freshGame.hud());
+    hudElapsed.current = 0;
+    renderElapsed.current = 0;
+    setMessage('');
+    resumeAfterCalibration.current = false;
+    resetScene();
+    scene.current?.draw(freshGame);
+  }, [resetScene]);
   const pause = useCallback(
     (reason = '') => {
       setMessage(reason);
@@ -101,12 +115,7 @@ export function useGameController() {
   });
 
   const start = () => {
-    game.current = new Game();
-    setHud(game.current.hud());
-    hudElapsed.current = 0;
-    scene.current?.draw(game.current);
-    setMessage('');
-    resumeAfterCalibration.current = false;
+    beginFreshRun();
     navigate('calibration');
   };
   const calibrate = () => {
@@ -124,7 +133,10 @@ export function useGameController() {
     setMessage('');
     navigate('calibration');
   };
-  const backFromCalibration = () => navigate(resumeAfterCalibration.current ? 'paused' : 'home');
+  const backFromCalibration = () => {
+    resetScene();
+    navigate(resumeAfterCalibration.current ? 'paused' : 'home');
+  };
   return {
     game,
     scene,
@@ -144,7 +156,10 @@ export function useGameController() {
       setMessage('');
       navigate('playing');
     },
-    menu: () => navigate('home'),
+    menu: () => {
+      resetScene();
+      navigate('home');
+    },
   };
 }
 export type GameController = ReturnType<typeof useGameController>;

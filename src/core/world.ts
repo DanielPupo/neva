@@ -8,6 +8,13 @@ export class ObstacleWorld {
 
   constructor(private readonly random: () => number = Math.random) {
     // Stable kinds let the renderer reuse one artwork per slot throughout a run.
+    this.reset();
+  }
+
+  reset() {
+    this.nextDistance = WORLD.firstRow;
+    for (const lane of [0, 1, 2] as Lane[]) this.laneCounts[lane] = 0;
+    this.obstacles.length = 0;
     for (let id = 0; id < WORLD.obstacleCount; id++) {
       this.obstacles.push({
         id,

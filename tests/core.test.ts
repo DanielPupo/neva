@@ -152,6 +152,34 @@ test('Game Over freezes physical state and score', () => {
   game.input('right');
   assert.equal(JSON.stringify(game), before);
 });
+test('reset restores the runtime state for a fresh run', () => {
+  const game = new Game(() => 0.2);
+  game.lane = 2;
+  game.x = 1.4;
+  game.lateralVelocity = 0.8;
+  game.height = 0.6;
+  game.verticalVelocity = -0.4;
+  game.landing = 0.9;
+  game.distance = 42;
+  game.speed = PHYSICS.maxSpeed;
+  game.dodged = 3;
+  game.over = true;
+  game.obstacles[0].passed = true;
+
+  game.reset();
+
+  assert.equal(game.lane, 1);
+  assert.equal(game.x, 0);
+  assert.equal(game.lateralVelocity, 0);
+  assert.equal(game.height, 0);
+  assert.equal(game.verticalVelocity, 0);
+  assert.equal(game.landing, 0);
+  assert.equal(game.distance, 0);
+  assert.equal(game.speed, PHYSICS.initialSpeed);
+  assert.equal(game.dodged, 0);
+  assert.equal(game.over, false);
+  assert.equal(game.obstacles[0].passed, false);
+});
 test('generation is distance based with reachable gaps and offscreen recycling', () => {
   const world = new ObstacleWorld(() => 0.5);
   for (let distance = 0; distance < 10000; distance += 5) {
